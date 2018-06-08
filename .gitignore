@@ -1,0 +1,4 @@
+__pycache__/
+test.csv
+train.csv
+gender_submission.csv
