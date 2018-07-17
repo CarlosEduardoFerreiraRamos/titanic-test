@@ -5,6 +5,7 @@ from data_set import Data_Set;
 from dummy_master import Dummy_Master;
 from regressor import Regressor;
 from metrics import Metrics;
+from back_elimination import Back_Eliminations;
 from set_reader import Set_Reader;
 from splitter import Splitter;
 from plot import Plot;
@@ -14,6 +15,7 @@ r = Regressor();
 sp = Splitter();
 mt = Metrics();
 m.print();
+be = Back_Eliminations();
 
 sr = Set_Reader();
 sr.read_files();
@@ -74,16 +76,19 @@ regressor_object_1 = Regressor();
 regressor_object_1.train_machine(all_X, all_y);
 prediction = r.predict(holdout[columns]);
 
+back_x = train_x;
+be.fit_OLS(all_y, all_X);
+be.sumary();
 
-holdout_ids = holdout["PassengerId"];
-sub_df = {
-	"PassengerId":holdout_ids,
-	"Survived": prediction	
-};
+# holdout_ids = holdout["PassengerId"];
+# sub_df = {
+# 	"PassengerId":holdout_ids,
+# 	"Survived": prediction	
+# };
 
-ds = Data_Set(sub_df);
-ds.to_csv("submission");
+# ds = Data_Set(sub_df);
+# ds.to_csv("submission");
 
-print(prediction)
+# print(prediction)
 # print(cross_accurace)
 
