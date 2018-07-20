@@ -9,6 +9,7 @@ from back_elimination import Back_Eliminations;
 from set_reader import Set_Reader;
 from splitter import Splitter;
 from plot import Plot;
+from process_data import Pre_Process_Data;
 
 m = Main('init');
 r = Regressor();
@@ -16,6 +17,7 @@ sp = Splitter();
 mt = Metrics();
 m.print();
 be = Back_Eliminations();
+pd = Pre_Process_Data();
 
 sr = Set_Reader();
 sr.read_files();
@@ -76,9 +78,9 @@ regressor_object_1 = Regressor();
 regressor_object_1.train_machine(all_X, all_y);
 prediction = r.predict(holdout[columns]);
 
-back_x = train_x;
-be.fit_OLS(all_y, all_X);
-be.sumary();
+# back_x = train_x;
+# be.fit_OLS(all_y, all_X);
+# be.sumary();
 
 # holdout_ids = holdout["PassengerId"];
 # sub_df = {
@@ -89,6 +91,6 @@ be.sumary();
 # ds = Data_Set(sub_df);
 # ds.to_csv("submission");
 
-# print(prediction)
+print(prediction)
 # print(cross_accurace)
 
