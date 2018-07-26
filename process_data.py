@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split;
 
 class Pre_Process_Data(object):
 	def __init__(self):
+		self.future_scaler = None;
 		self.one_hot_encoder = None;
 		self.fitted_hot_encoder = None;
 		self.label_encoder = None;
@@ -20,10 +21,10 @@ class Pre_Process_Data(object):
 		pass
 
 	# the hole processes describe below.
-	def replace_missing_data(self, value, strategy, axis, data):
+	def replace(self, value, strategy, axis, data):
 		self.config_replacer(value, strategy, axis);
 		self.replace_missing_data(data);
-		return self.return_missing_data(self);
+		return self.return_missing_data(data);
 
 	# Set the imputer with the parameters.
 	# value: tells the imputer the value it msut search to replace (ex: NaN); 
@@ -31,22 +32,21 @@ class Pre_Process_Data(object):
 	# axis: tells the imputer to replace the data using 0 the column or 1 the row; 
 	def config_replacer(self, value, strategy, axis):
 		axis = 1 if axis =='row' else 0; 
-		self.imputer = Imputer(missing_values=value, strategy=strategy, axis=axis);
+		self.imputer = Imputer(strategy=strategy, missing_values=value, axis=axis);
 		pass
 
 	# Replaces the missing data.
 	# Isin't necessery to pass al the data set.
-	# Can pass only one column (ex: data[:, index])
-	# or a group of columns (ex: data[:, indexStartiIncluded : indexEndedNotIncluded])
-	# or just a set number of coluns (ex: data[:, [finstIndx , secoundIndex, ... , lastIndex])
+	# Can pass only one column (ex: [data[:, index]])
+	# or a group of columns (ex: [data[:, indexStartiIncluded : indexEndedNotIncluded])
+	# or just a set number of coluns (ex: [data[:, [finstIndx , secoundIndex, ... , lastIndex])
 	def replace_missing_data(self, data):
-		self.target_data = data;
 		self.imputer = self.imputer.fit(data);
 		pass
 
 	# return the missing data set.
-	def return_missing_data(self):
-		return self.imputer.transform(self.target_data);
+	def return_missing_data(self, data):
+		return self.imputer.transform(data);
 
 	# Codes de label column.
 	# The especific column mus be pass.
@@ -89,11 +89,44 @@ class Pre_Process_Data(object):
 	# return X_train,X_test, y_train, y_test;
 	# test_size value is a double (ex: 0.2);
 	# randon_state will change de value of the splitted set;
+	# doing this procedure you don't need to fit the test set after.
 	def get_train_test_sets(sefl, X, y, test_size):
-		X_test, X_train, y_test, ytrain = train_test_split(X, y, test_size = test_size, random_state = 0);
+		X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = test_size, random_state = 0);
+		return X_train, X_test, y_train, y_test;
 
 	# base: euclides distances
-	def feature_saceling(X_train):
-		sc_X = StandardScaler();
-		X_train = sc_X.fit_transform(X_train)
-		X_test = sc_X.transform(X_test)
+	# Used in analises based in the euclides distance, but not excluding
+	# Future scaling transforms the data, to be used more preciselly.
+	# It can fit the data do its current model or just transforme it.
+	# the data must contain only the data you want to transform/fit (ex; data_train[:, 1:4])
+	# CATEGORICAL DATA: those previously transformed to dumy variables can receive a future scale treatment
+	# the decision when to apply the future scale must ponder opon if you want to keepit like a refernce or not.
+	# if the test set havent been fitted you must fit and transform bouth the train and the test set.      
+	def scale_fit_train_test(self, X_train, X_test):
+		self.create_future_scaling();
+		X_train = self.fit_transform_independents_varibles(X_train);
+		X_test = self.fit_transform_independents_varibles(X_test);
+		return X_train, X_test; 
+
+	# Fit and transform the Train set  
+	def scale_fit_data(self, X_train):
+		self.create_future_scaling();
+		return self.fit_transform_independents_varibles(X_train);
+
+	# Transform de test set without fitting it to the model!
+	def scale_data(self, X_test):
+		self.create_future_scaling();
+		return self.transform_independents_varibles(X_test);		
+	# Creat the StandardScaler obejct.
+	def create_future_scaling(self):
+		if self.future_scaler == None:
+			self.future_scaler = StandardScaler();
+			pass
+
+	# Fit and tranform data
+	def fit_transform_independents_varibles(self, data):
+		return self.future_scaler.fit_transform( data);		
+
+	# Transform data
+	def transform_independents_varibles(self, data):
+		return self.future_scaler.transform( data);	

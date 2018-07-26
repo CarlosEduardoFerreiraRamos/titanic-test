@@ -82,15 +82,17 @@ prediction = r.predict(holdout[columns]);
 # be.fit_OLS(all_y, all_X);
 # be.sumary();
 
-# holdout_ids = holdout["PassengerId"];
-# sub_df = {
-# 	"PassengerId":holdout_ids,
-# 	"Survived": prediction	
-# };
+holdout_ids = holdout["PassengerId"];
 
-# ds = Data_Set(sub_df);
-# ds.to_csv("submission");
+sub_df = {
+	"PassengerId":holdout_ids,
+	"Survived": prediction	
+};
+
+ds = Data_Set(sub_df);
+ds.to_csv("submission");
 
 print(prediction)
+print(holdout_ids)
 # print(cross_accurace)
 

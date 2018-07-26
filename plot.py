@@ -5,11 +5,26 @@ class Plot(object):
 	def __init__(self):
 		pass
 
-	def plot_set_survived(self, set, index, values):
-		sex_pivot = set.pivot_table(index=index, values=values);
+	def plot_set_survived(self, data_set, index, values):
+		sex_pivot = data_set.pivot_table(index=index, values=values);
 		sex_pivot.plot.bar();
 		plt.show();
 		pass
+
+	def show_plot(self, data_set):
+		data_set.plot.bar();
+		plt.show();
+
+	def remove_columns(self, data_frame, columns):
+		return data_frame.drop(columns=columns);
+
+	def get_columns(self, data_frame):
+		boolean_arrray = data_frame.isnull().any();
+		return data_frame.columns[boolean_arrray].tolist();
+
+	def get_columns_index(self, data_frame):
+		boolean_arrray = data_frame.isnull().any();
+		return data_frame.columns[boolean_arrray];
 
 	def prot_histogram_sruvived(self, set):
 		survived = set[set['Survived'] == 1];
