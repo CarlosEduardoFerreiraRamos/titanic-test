@@ -13,6 +13,8 @@ import pandas as pd;
 # get train and test sets
 sr = Set_Reader();
 sr.read_files();
+
+"""train should be separeted in train_x and train_y, fist independedt variables and the secound dependent variables"""
 train = sr.get_train();
 test = sr.get_test();
 

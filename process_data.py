@@ -51,7 +51,10 @@ class Pre_Process_Data(object):
 	# Codes de label column.
 	# The especific column mus be pass.
 	# In case the column posses more than two labes
-	# should be created dumy variables using one hot encoder
+	# should be created dumy variables using one hot encoder.
+	# THE DUMMY VARIABLE TRAP:
+	# Wen creating dumy variables they can cancel one another out.
+	# the Dummy varibles may be discrabe as Di = 1 - Dj, so will be not consider.
 	def encode_label_data(self, column):
 		self.create_label_encoder();
 		self.fit_to_label_encoder(column);
@@ -101,27 +104,32 @@ class Pre_Process_Data(object):
 	# the data must contain only the data you want to transform/fit (ex; data_train[:, 1:4])
 	# CATEGORICAL DATA: those previously transformed to dumy variables can receive a future scale treatment
 	# the decision when to apply the future scale must ponder opon if you want to keepit like a refernce or not.
-	# if the test set havent been fitted you must fit and transform bouth the train and the test set.      
+	# if the test set havent been fitted you must fit and transform bouth the train and the test set.
+	# Future scaling is pressent in most machinelearning libraries, if the library being used is using it thsi part must be skiped.      
 	def scale_fit_train_test(self, X_train, X_test):
 		self.create_future_scaling();
 		X_train = self.fit_transform_independents_varibles(X_train);
 		X_test = self.fit_transform_independents_varibles(X_test);
 		return X_train, X_test; 
 
+	# this is how is discribe im most tutorials. 
+	# def scale_fit_train_test(self, X_train, X_test):
+	# 	self.create_future_scaling();
+	# 	self.future_scaler.fit(X_train)
+	# 	X_train = self.future_scaler.transform(X_train);
+	# 	X_test = self.future_scaler.transform(X_test);
+	# 	return X_train, X_test; 
+
 	# Fit and transform the Train set  
 	def scale_fit_data(self, X_train):
-		self.create_future_scaling();
 		return self.fit_transform_independents_varibles(X_train);
 
 	# Transform de test set without fitting it to the model!
 	def scale_data(self, X_test):
-		self.create_future_scaling();
 		return self.transform_independents_varibles(X_test);		
 	# Creat the StandardScaler obejct.
 	def create_future_scaling(self):
-		if self.future_scaler == None:
-			self.future_scaler = StandardScaler();
-			pass
+		self.future_scaler = StandardScaler();
 
 	# Fit and tranform data
 	def fit_transform_independents_varibles(self, data):

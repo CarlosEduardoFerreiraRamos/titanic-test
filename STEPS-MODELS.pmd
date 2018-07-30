@@ -1,0 +1,28 @@
+1 - All-in # not tecnical term =]
+2 - backward elimnation
+forwarddirection
+bidirectional elimination
+score comparison.
+
+
+
+
+
+2 - backward elimnation:
+- shoose the signifincat level(SL) ... like 0,05
+- fit all the variables.
+- consider the predictor with the highest P-value. If P > SL go to next step.
+- remove the predictor with the highest P-value.
+- fit without the variable. got back to step 3 until all variables are bellow p. if they are, got to 6.
+- End analises. FIN
+
+2 - foward selection
+ - selct a significanse level to fit the model (sl =0.05)
+ - fit all wit simple regression. Selecte the one with the least p value. 
+ - fit all the possibles models with one extra predictor
+ - consider the with the lowest P value. If is lower go FIn, if not back to stpe 3.
+
+3 - bidirectional elimination:
+ - Selec the Sl to stay and to enter.
+ - Perform the steps of the forwad selection.
+ - perform the stapes the back elimination.

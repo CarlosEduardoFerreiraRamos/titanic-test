@@ -4,7 +4,6 @@ from sklearn.linear_model import LogisticRegression;
 class Regressor(object):
 	def __init__(self):
 		self.lr = LogisticRegression();
-		print("New Logistic Regression");
 		pass
 
 	def train_machine(self, columns, target_column):
