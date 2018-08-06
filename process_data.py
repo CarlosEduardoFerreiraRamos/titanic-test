@@ -113,12 +113,12 @@ class Pre_Process_Data(object):
 		return X_train, X_test; 
 
 	# this is how is discribe im most tutorials. 
-	# def scale_fit_train_test(self, X_train, X_test):
-	# 	self.create_future_scaling();
-	# 	self.future_scaler.fit(X_train)
-	# 	X_train = self.future_scaler.transform(X_train);
-	# 	X_test = self.future_scaler.transform(X_test);
-	# 	return X_train, X_test; 
+	def scale_fit_tranform_train_test(self, X_train, X_test):
+		self.create_future_scaling();
+		self.future_scaler.fit(X_train)
+		X_train = self.future_scaler.transform(X_train);
+		X_test = self.future_scaler.transform(X_test);
+		return X_train, X_test; 
 
 	# Fit and transform the Train set  
 	def scale_fit_data(self, X_train):

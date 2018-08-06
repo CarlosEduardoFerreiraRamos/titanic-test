@@ -8,6 +8,10 @@ class Set_Reader(object):
 		self.test = pd.read_csv("test.csv");
 		self.train = pd.read_csv("train.csv");
 		pass
+
+	def read_file(self, file_name):
+		file_path = 'data_sets/' + file_name + '.csv';
+		return pd.read_csv(file_path);
 		
 	def print_files_shapes(self):
 		print("Dimensions of train: {}".format(self.train.shape))

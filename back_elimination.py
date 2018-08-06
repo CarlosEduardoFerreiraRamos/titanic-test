@@ -12,21 +12,27 @@ import statsmodels.formula.api as sm;
  
  *** ordinary least squares
  optimal_array_of_features = 
- regressor = sm.OLS(endog = y, enxog = optimal_array_of_features).fit()
+ regressor = smO.LS(endog = y, enxog = optimal_array_of_features).fit()
 
  regressor.summary();
  """
 
-class Back_Eliminations(object):
+class Back_Elimination(object):
 	def __init__(self):
 		self.regressor_OLS = None;
+		self.ols = None;
 		pass
 		
 	def fit_OLS(self, y, X_opt):
 		self.regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
 		pass
 
+	def get_p_values(self):
+		return self.regressor_OLS.pvalues;
+
 	def sumary(self):
 		print(self.regressor_OLS.summary());
-
 		pass
+
+	def get_sumary(self):
+		return self.regressor_OLS.summary();

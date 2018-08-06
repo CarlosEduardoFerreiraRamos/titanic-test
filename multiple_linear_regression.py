@@ -6,7 +6,7 @@ class Multiple_Linear_Regressor(object):
 		self.prediction = None;
 		
 	def create_regressor(self):
-		self.regressor = LinearRegression()
+		self.regressor = LinearRegression();
 		pass
 
 	def train_machine(self, x_train, y_train):

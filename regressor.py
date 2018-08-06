@@ -1,9 +1,8 @@
-
 from sklearn.linear_model import LogisticRegression;
 
 class Regressor(object):
 	def __init__(self):
-		self.lr = LogisticRegression();
+		self.lr = LogisticRegression(random_state = 0);
 		pass
 
 	def train_machine(self, columns, target_column):
