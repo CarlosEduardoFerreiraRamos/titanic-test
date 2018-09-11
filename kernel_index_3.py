@@ -65,4 +65,4 @@ sub_df = {
 };
 
 ds = pd.DataFrame(sub_df);
-ds.to_csv("submission.csv");
+ds.to_csv("submission.csv", index=False);

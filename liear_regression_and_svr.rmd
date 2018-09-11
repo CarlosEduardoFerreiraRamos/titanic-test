@@ -1,0 +1,3 @@
+the difference goals of SVR and Lienar Regression;
+	- Linear Regression has the goal of reducing the error between the prediction and the data;
+	- SVR has the goal to make sure that the erros don't exceed the threshold.

@@ -56,3 +56,9 @@ class Plot(object):
 		pivot.plot.bar()
 		plt.show()
 
+	def plot_dendogram(self):
+		plt.title('Dendogram');
+		plt.xlabel('X axis');
+		plt.ylabel('Y axis');
+		plt.show();
+
