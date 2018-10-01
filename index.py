@@ -11,6 +11,8 @@ from splitter import Splitter;
 from plot import Plot;
 from process_data import Pre_Process_Data;
 
+import visual-python
+
 m = Main('init');
 r = Regressor();
 sp = Splitter();

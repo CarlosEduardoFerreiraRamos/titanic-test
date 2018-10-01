@@ -1,6 +1,7 @@
 import numpy as np;
 import pandas as pd;
 import statsmodels.formula.api as sm;
+import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import StandardScaler;
 from sklearn.linear_model import LogisticRegression;
@@ -10,10 +11,10 @@ from sklearn.linear_model import LinearRegression;
 
 """ READ DATA SET FILES """
 df_train = pd.read_csv('data_sets/house_prices_train.csv');
-df_test = pd.read_csv('data_sets/house_prices_test.csv');
+# df_test = pd.read_csv('data_sets/house_prices_test.csv');
 
 # hold test id for later
-test_ids = df_test['Id']; 
+# test_ids = df_test['Id']; 
 train_set_number = len(df_train)
 # del df_train['Id'];
 # del df_test['Id'];
@@ -30,7 +31,7 @@ categotical_columns = ['MSSubClass','MSZoning', 'Street', 'Alley', 'LotShape', '
  'SaleCondition'];
 
 # concat train and test sets to creat the same dummy variables
-concateneted_dateset = pd.concat([df_train, df_train], axis=0);
+concateneted_dateset = df_train;
 
 for column in  categotical_columns:
 	# replace categotical missing data
@@ -40,8 +41,11 @@ for column in  categotical_columns:
 	concateneted_dateset = pd.concat([concateneted_dateset, dummies], axis = 1);
 
 # split the dataset back to train and test sets
-df_train = concateneted_dateset.iloc[0:train_set_number];
-df_test = concateneted_dateset.iloc[train_set_number + 1:len(concateneted_dateset)];
+trainIndexs = np.random.rand(len(concateneted_dateset)) < 0.8
+df_train = concateneted_dateset[trainIndexs];
+df_test = concateneted_dateset[~trainIndexs];
+train_ids = df_train["Id"]
+test_ids = df_test["Id"] 
 
 """REMOVE ORIGINAL CATEGORICAL COLUMNS"""
 df_train = df_train.drop(columns = categotical_columns);
@@ -95,13 +99,31 @@ prediction = regressor.predict(df_test.loc[:, df_test.columns != "SalePrice"]);
 # SUBMIT ANSWER
 # #################
 
+plt.scatter(test_ids, df_test["SalePrice"], color = 'red')
+plt.plot(test_ids, prediction, color = 'blue')
+plt.
+plt.title('Linear ')
+plt.xlabel('Id')
+plt.ylabel('Sale Price')
+plt.show()
+
+
+
+# plt.hist(list(df_test["SalePrice"]))
+# plt.title('Histogram of ads selections')
+# plt.xlabel('Ads')
+# plt.ylabel('Number of times each ad was selected')
+# plt.show()
+
+
 sub_df = {
 	"Id":test_ids,
-	"SalePrice": prediction	
+	"salesPrice": df_test["SalePrice"],
+	"Predict":  prediction	
 };
 
 ds = pd.DataFrame(sub_df);
-ds.to_csv("house_prices_submission.csv", index=False);
+ds.to_csv("house_prices_submission_test.csv", index=False);
 
 
 

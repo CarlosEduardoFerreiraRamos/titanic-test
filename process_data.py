@@ -1,3 +1,12 @@
+"""
+Efficient backProp
+
+Standalizaion normalization
+
+by Yann LeCun
+"""
+
+
 # library to process the fields with no value;
 from sklearn.preprocessing import Imputer;
 # library to process categorical data;

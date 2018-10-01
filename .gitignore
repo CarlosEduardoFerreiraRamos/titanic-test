@@ -1,6 +1,4 @@
 __pycache__/
-test.csv
-train.csv
-submission.csv
-gender_submission.csv
 data_sets/
+env/
+predict_data/
