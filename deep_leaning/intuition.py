@@ -145,3 +145,67 @@ Step by step trainig Atificial neural net with stochastic gradient descent:
 
 7 - when the whole training set passed through the ANN, taht makes as epach. Redo more epochs
 """
+
+"""
+Convolutional neural networks CNN
+
+step 1 - covolution operation
+
+step 1(b) - ReLU layer
+
+step 2 - Pooling
+
+step 3 - flattrning
+
+step 4 - full connection
+
+summury
+
+extra: softmax & cross - entropy
+"""
+
+"""
+gradient-Based LEarning Applied to Document Recognition
+
+Yann LeCun et all (1998)
+"""
+
+"""
+covoluction function
+
+         def
+(f*g)(t) === S f(t)g(t - T)dT
+
+this is to begginers
+Introduction to convolutional Neural Networks
+Jianxin Wu (2017)
+
+"""
+
+"""
+Step 1
+Convolution
+
+feature detection (MATRIX) => its 3 x3 or 5x5 or 7x7
+also called filter or kernel
+
+with it we can create a feature map
+
+and you make layer of filters
+"""
+
+"""
+Step 1 (b)
+
+Get our feature map and apply a rectfier fucntion
+
+Imges are highrlier non linear, so you msut reduce your linearity, like with rectifier function to brak the lienearity
+
+Undertanding Convolutional Neural Networks with A Mathmatical Model
+C.-C. Jay Kuo (2016)
+
+Delving Deep Into Rectfiers:
+Surpassing Human-level Performance on ImageNet Classification
+Kaiming He et al (2015) => in this artiche they proporse taht a paremetreic retfirer return better results
+
+"""
