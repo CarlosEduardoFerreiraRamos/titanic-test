@@ -209,3 +209,33 @@ Surpassing Human-level Performance on ImageNet Classification
 Kaiming He et al (2015) => in this artiche they proporse taht a paremetreic retfirer return better results
 
 """
+
+"""
+Step 2
+Max pooling
+# pooling - downsampling
+
+spacial variant
+
+how pooling works:
+you collect the max of the features in your filter maxtris passing a another matrix, like a 2x2, that will gatter the max value found
+
+What it does: Filter the more significant features
+
+Evaluation of pooling Operations in Convolutional Architectures for Object Recognition
+Dominik Scherer et al (2010)
+
+an image tool scs.ryerson.ca/ or scs.ryerson.ca/~aharley/vis/conv/flat.html
+"""
+
+"""
+Step 3
+Flatteing
+
+flats the matris in to one column to be applyed to a ANN
+"""
+
+"""
+Full conection
+"""
+
