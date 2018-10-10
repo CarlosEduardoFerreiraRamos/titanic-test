@@ -236,6 +236,20 @@ flats the matris in to one column to be applyed to a ANN
 """
 
 """
-Full conection
+Full conection - (its a type o hidden layes from ann) it's a fully connected one...
+# main goll is to combine our features
+lost function*** = costfunction (an error is calculated)
+
+***it's a cross entropy function
+
+# The features detected are also ajusted in this processes
+"""
+
+"""
+The 9 Deep Learning Papers you Need to know about
+(Understanding CNNs part 3)
+
+Adit Deshpande (2016)
+
 """
 
