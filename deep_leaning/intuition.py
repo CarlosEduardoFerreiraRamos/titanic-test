@@ -252,4 +252,47 @@ The 9 Deep Learning Papers you Need to know about
 Adit Deshpande (2016)
 
 """
+# EXTRA MATERIAL
+
+"""
+SoftMax & Cross-Entropy
+
+SoftMax:
+
+fi(z) = e^ej/ Ee^zk 
+
+wikipedia - SoftMax function is used to bring the output nodules comparing to 1. This function is a generalization
+of the log function that squashis the values to a k dimention vactor of real values from 0 to 1, adding up to 1
+
+Cross-entropy:
+
+function original  Li = -log(e^fyi)
+
+function using  H(p,q) = -E p(x)*log q(x)
+q = trainedValue
+p = expectedValue
+
+the results are the same for both buts is easyer to calculate the secound
+This is what cost teh lost fucntion, it mnust be minimised
+
+errors
+    *classification error error = (nRigth/nVvalues)
+    *Mean square error = sum of ² errors
+    *cross-entropy
+
+cross entropy can work with small erros so the cnn can react to it from the start
+
+!this only works for classificaton, if you have a regression you should go with someting like mean square error
+
+Jeff Hinton
+https://www.youtube.com/watch?v=mlaLLQofmR8
+
+A friedly INtroduction ro Cross-Entropy loss
+Rob DiPiedtro (2016)
+
+How to implement a neural network Intermezzo 2
+Peter Roelants (2016)
+
+*Intermezzo it's like a intermediary, or like a break, its ging for step by step
+"""
 
