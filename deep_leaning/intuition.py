@@ -163,7 +163,10 @@ summury
 
 extra: softmax & cross - entropy
 """
-
+"""
+COnvulution Neural Network is a ANN that has a convolutional trick before de ANN, to preserve de spacial structural in images,
+so we can classifie our images
+"""
 """
 gradient-Based LEarning Applied to Document Recognition
 
@@ -199,7 +202,7 @@ Step 1 (b)
 
 Get our feature map and apply a rectfier fucntion
 
-Imges are highrlier non linear, so you msut reduce your linearity, like with rectifier function to brak the lienearity
+Imges are highrlier non linear, so you msut reduce your linearity, like with rectifier function to break the lienearity
 
 Undertanding Convolutional Neural Networks with A Mathmatical Model
 C.-C. Jay Kuo (2016)
@@ -218,7 +221,7 @@ Max pooling
 spacial variant
 
 how pooling works:
-you collect the max of the features in your filter maxtris passing a another matrix, like a 2x2, that will gatter the max value found
+you collect the max of the features in your filter matrix passing a another matrix, like a 2x2, that will gatter the max value found
 
 What it does: Filter the more significant features
 
@@ -232,7 +235,7 @@ an image tool scs.ryerson.ca/ or scs.ryerson.ca/~aharley/vis/conv/flat.html
 Step 3
 Flatteing
 
-flats the matris in to one column to be applyed to a ANN
+flats the matrix in to one column to be applyed to a ANN
 """
 
 """
