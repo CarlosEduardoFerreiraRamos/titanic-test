@@ -18,7 +18,7 @@ Principal components Analysis(PCA)
 2 - detect the correlation between the variables
 
 break down of the pca processes:
-# Stadardize teh data
+# Stadardize the data
 # Obtain Eigenvector and Eigenvalues from the covariace matrix or correlation matrix, or perform Singular Vector Decomposition
 # Sort eigenvlues in descending orider and choose the k eigevector that correspon to the largest eigenvalues where k is the
   number of dimension of the new feature subspace
