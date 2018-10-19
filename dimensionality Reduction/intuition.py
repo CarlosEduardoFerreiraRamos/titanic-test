@@ -33,3 +33,31 @@ find list of principal axes
 
 cons: hight afected by outliers in the data
 """
+
+"""
+Linear Discirminant Analysis - LDA
+
+used as dimensionality reduction technique
+used in the pre-processing step for patter classification
+has the goal to project a dataset onto a lower-dimensional space
+
+LDA differs from PCA in that LDA try to find max axis that differentiate the classes
+
+the goal of PDA is to project a feature space onto a small subspace while maintaining
+the class-discriminatory information.
+
+So both LDA and PDA are linear transformation techniques for dimension reduction.
+PDA is unsurpevised.
+LDA is supervised, becouse of it's relation to it'd dependent varible
+
+break down of the LDA processes:
+# Compute of d-dimentional mean vectors for the different classes from the database 
+# conpute the scatter matrix
+# Compute the eigenvectors and correspondent eigevalues for the scatter matrix. 
+# Sort eigenvectors by decresing eigevalues and choose the k eigevector that correspon to the largest eigenvalues
+  to form a d x k dimensional matrix W (where every colum represents a eigevector) 
+# Use this d x k eigenvectors matrix to trasform  the samples onto  the new subspace.
+  This can be summarized by the matrix multiplication: Y = X * W
+  (wheres X is the n xd dimensional matrix representing the n samples, and y it's the n x k dimensional
+  samples in the new subspace)  
+"""
