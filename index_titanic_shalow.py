@@ -9,6 +9,8 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 
 df_train = pd.read_csv('data_sets/titanic/train.csv')
@@ -32,14 +34,14 @@ df_train.loc[:, catecorical_array]
 df_train.columns[catecorical_array]
 
 del df_train['Name']
-# del df_train['Ticket']
+del df_train['Ticket']
 # LabelEncoder().fit_transform(df_train.loc[:, ['Survived', 'Sex']])
 
 # concat train and test sets to creat the same dummy variables
 concateneted_dateset = df_train;
 
 # categorical features
-t_c = [ 'Sex', 'Cabin', 'Embarked', 'Ticket'];
+t_c = [ 'Sex', 'Cabin', 'Embarked'];
 
 # create dummy variables
 for column in  t_c:
@@ -52,6 +54,7 @@ df_train = concateneted_dateset[trainIndexs]
 df_test = concateneted_dateset[~trainIndexs]
 train_ids = df_train["PassengerId"]
 test_ids = df_test["PassengerId"]
+del df_train["PassengerId"]
 
 """REMOVE ORIGINAL CATEGORICAL COLUMNS"""
 df_train = df_train.drop(columns = t_c)
@@ -84,19 +87,47 @@ while max_p_value > 0.05:
 
 # remove b0
 del df_train['b0'];
-print('done')
+
 """ LOGISTIC REGRESSION """
-regressor = LogisticRegression(random_state=0)
-regressor.fit(df_train.loc[:, df_train.columns != "Survived"], df_train["Survived"])
-prediction = regressor.predict(df_test.loc[:, df_test.columns != "Survived"])
+classifier = LogisticRegression(random_state=42)
+classifier.fit(df_train.loc[:, df_train.columns != "Survived"], df_train["Survived"])
+prediction = classifier.predict(df_test.loc[:, df_test.columns != "Survived"])
+
+""" NAIVE BAYES """
+from sklearn.naive_bayes import GaussianNB;
+classifier = GaussianNB()
+classifier.fit(df_train.loc[:, df_train.columns != "Survived"], df_train["Survived"])
+prediction = classifier.predict(df_test.loc[:, df_test.columns != "Survived"])
 
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(df_test["Survived"], prediction)
+
+# k-fold cross validation
+accuracies = cross_val_score(estimator = classifier, X = df_train.loc[:, df_train.columns != "Survived"], y = df_train["Survived"], cv = 10)
+accuracies.mean()
+accuracies.std()
+
+# grid search
+parameters = [
+    {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+    {'C': [1, 10, 100, 1000], 'kernel': ['rbf'], 'gamma': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}
+]
+grid_search = GridSearchCV(estimator = classifier,
+                           param_grid = parameters,
+                           scoring = 'accuracy',
+                           cv = 10)
+
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+
 """
 LogisticRegression
 without Droping Dummy first varible     dropping dummy first varible        the later and using the tickets columns
-[88, 19],                               [96, 17],                           [92,  9],
-[27, 51]                                [36, 40]                            [30, 43]
+[88, 19],                               [112, 10],                           [92,  9],
+[27, 51]                                [17, 51]                             [30, 43]
+#mean									0.7862146793806317
+standert Deviation						0.033766032839746295
 """
 plt.scatter(test_ids, df_test["Survived"], color = 'red')
 plt.scatter(test_ids, prediction, color = 'blue')
