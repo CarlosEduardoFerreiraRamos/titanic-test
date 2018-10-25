@@ -94,3 +94,22 @@ while max_p_value > 0.05:
 
 # remove b0
 del X_train['b0'];
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+""" ANN """
+classifier = Sequential()
+classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu', input_dim = 4))
+classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu'))
+classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# add the data
+classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train, batch_size = 10, nb_epoch = 100)
+prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
