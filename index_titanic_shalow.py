@@ -112,6 +112,12 @@ classifier = SVC(C = 1.0 ,kernel = 'rbf', random_state=0)
 classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
 prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
 
+""" KNN """
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors = 5, metric= 'minkowski', p =2)
+classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
+prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
+
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, prediction)
 
@@ -122,7 +128,7 @@ accuracies.std()
 
 # grid search 
 parameters = [
-    {'C': [1, 10, 100, 1000], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid']},
+	{'n_neighbors': [4,5,6]}
 ]
 grid_search = GridSearchCV(estimator = classifier,
                            param_grid = parameters,
@@ -154,6 +160,12 @@ SVM (C) unselected						C: 1 & kernel rbf and removin name and tickets	C: 1 & ke
 [ 36,  48]
 0.7481272350837569
 0.07182253359818928
+
+KNN										n_neighbors: 5 removin name and tickets			n_neighbors: 5 with name and tickets
+[115,  24],								unchenged // 									unchenged //
+[ 38,  46]
+0.7123376623376624
+0.0661482248329322
 """
 plt.scatter(test_ids, df_test["Survived"], color = 'red')
 plt.scatter(test_ids, prediction, color = 'blue')
