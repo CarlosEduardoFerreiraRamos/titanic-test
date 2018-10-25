@@ -42,15 +42,15 @@ del df_train["PassengerId"]
 concateneted_dateset = df_train;
 
 # categorical features
-t_c = [ 'Sex', 'Cabin', 'Embarked'];
+t_c = [ 'Sex', 'Cabin', 'Embarked'] #, 'Ticket','Name'];
 
 # create dummy variables
 for column in  t_c:
 	dummies = pd.get_dummies(concateneted_dateset[column], prefix=column, drop_first=True);
 	concateneted_dateset = pd.concat([concateneted_dateset, dummies], axis = 1);
 
-df_y = df_train['Survived']
-df_x = df_train.loc[:, df_train.columns != "Survived"]
+df_y = concateneted_dateset['Survived']
+df_x = concateneted_dateset.loc[:, concateneted_dateset.columns != "Survived"]
 # split the dataset back to train and test sets
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(df_x,df_y, test_size = 0.25, random_state = 0)
@@ -94,22 +94,38 @@ while max_p_value > 0.05:
 
 # remove b0
 del X_train['b0'];
-
+X_train.columns
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
 
 """ ANN """
 classifier = Sequential()
-classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu', input_dim = 4))
-classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu'))
+classifier.add(Dense(output_dim = 7, init = 'uniform', activation = 'relu', input_dim = 12))
+classifier.add(Dense(output_dim = 7, init = 'uniform', activation = 'relu'))
 classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# becouse the activation function in the output layer is a sigmoid function prediction will have values raging from 1 to 0  
 
 # add the data
 classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train, batch_size = 10, nb_epoch = 100)
 prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
 
+# loss
+scores = classifier.evaluate(X_train.loc[:, X_train.columns != "Survived"],y_train)
+
+# round prediction
+y_pred =  [round(x[0]) for x in prediction]
+
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
+
+"""
+KNN										
+[126,  13],								
+[ 29,  55]
+[0.5684325038316007,
+ 0.7245508982035929]
+"""

@@ -14,7 +14,7 @@ from sklearn.model_selection import GridSearchCV
 
 
 df_train = pd.read_csv('data_sets/titanic/train.csv')
-# df_test = pd.read_csv('data_sets/house_prices_test.csv');
+df_test = pd.read_csv('data_sets/titanic/test.csv');
 passenger_id = df_train['PassengerId']
 
 """ Find missing value coluns"""
@@ -94,95 +94,3 @@ while max_p_value > 0.05:
 
 # remove b0
 del X_train['b0'];
-
-""" LOGISTIC REGRESSION """
-classifier = LogisticRegression(random_state=42)
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
-
-""" NAIVE BAYES """
-from sklearn.naive_bayes import GaussianNB;
-classifier = GaussianNB()
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
-
-""" SVM """
-from sklearn.svm import SVC
-classifier = SVC(C = 1.0 ,kernel = 'rbf', random_state=0)
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
-
-""" KNN """
-from sklearn.neighbors import KNeighborsClassifier
-classifier = KNeighborsClassifier(n_neighbors = 5, metric= 'minkowski', p =2)
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
-
-""" DECISON TREE """
-from sklearn.tree import DecisionTreeClassifier
-classifier = DecisionTreeClassifier(criterion = 'entropy', random_state = 0)
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
-
-from sklearn.metrics import confusion_matrix
-cm = confusion_matrix(y_test, prediction)
-
-# k-fold cross validation
-accuracies = cross_val_score(estimator = classifier, X = X_test.loc[:, X_test.columns != "Survived"], y = y_test, cv = 10)
-accuracies.mean()
-accuracies.std()
-
-# grid search 
-parameters = [
-	{'n_neighbors': [4,5,6]}
-]
-grid_search = GridSearchCV(estimator = classifier,
-                           param_grid = parameters,
-                           scoring = 'accuracy',
-                           cv = 10)
-
-grid_search = grid_search.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
-best_accuracy = grid_search.best_score_
-best_parameters = grid_search.best_params_
-
-"""
-LogisticRegression
-without Droping Dummy first varible     dropping dummy first varible        the later and using the tickets columns
-[88, 19],                               [116,  23],                           
-[27, 51]                                [ 23,  61]                            
-#mean									0.798541313758705
-standert Deviation						0.07817332352866786
-"""
-
-"""
-Naive Bayes
-[104,  35],
-[ 31,  53]
-0.7212309429700734
-0.07138662304387629
-
-SVM (C) unselected						C: 1 & kernel rbf and removin name and tickets	C: 1 & kernel rbf and with name and tickets
-[118,  21],								unchenged // 									unchenged //
-[ 26,  58]
-0.7838791643139469
-0.05547009091778175
-
-KNN										n_neighbors: 5 removin name and tickets			n_neighbors: 5 with name and tickets
-[126,  13],								unchenged // 									unchenged //
-[ 26,  58]
-0.7710521362695276
-0.06105345433540183
-
-DECISION TREES
-[117,  22],
-[ 30,  54]
-0.7358742706568794
-0.06814500839632841
-"""
-plt.scatter(test_ids, df_test["Survived"], color = 'red')
-plt.scatter(test_ids, prediction, color = 'blue')
-plt.
-plt.title('Linear')
-plt.xlabel('Id')
-plt.ylabel('Sale Price')
-plt.show()
