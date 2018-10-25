@@ -15,19 +15,28 @@ from sklearn.model_selection import GridSearchCV
 
 df_train = pd.read_csv('data_sets/titanic/train.csv')
 df_test = pd.read_csv('data_sets/titanic/test.csv');
-passenger_id = df_train['PassengerId']
+passenger_id_train = df_train['PassengerId']
+passenger_id_test = df_test['PassengerId']
 
 """ Find missing value coluns"""
 ploter = Plot()
 missing_value_columns = ploter.get_columns(df_train)
 
+ploter_test = Plot()
+missing_value_columns_test = ploter_test.get_columns(df_test)
+
 """dealing with numeric missing data"""
 imputer = Imputer(axis=0);
 df_train[['Age']] = imputer.fit_transform(df_train[['Age']])
+df_test[['Age']] = imputer.fit_transform(df_test[['Age']])
+df_test[['Fare']] = imputer.fit_transform(df_test[['Fare']])
 
 """ replace missign categorical data"""
 df_train['Cabin'] = df_train['Cabin'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
 df_train['Embarked'] = df_train['Embarked'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
+
+df_test['Cabin'] = df_test['Cabin'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
+df_test['Embarked'] = df_test['Embarked'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
 
 # catecorical_array = df_train.dtypes == object
 # df_train.loc[:, catecorical_array]
@@ -36,24 +45,42 @@ df_train['Embarked'] = df_train['Embarked'].apply(lambda x: 'missing_data' if st
 del df_train['Name']
 del df_train['Ticket']
 del df_train["PassengerId"]
+
+del df_test['Name']
+del df_test['Ticket']
+del df_test["PassengerId"]
 # LabelEncoder().fit_transform(df_train.loc[:, ['Survived', 'Sex']])
 
 # concat train and test sets to creat the same dummy variables
-concateneted_dateset = df_train;
+concateneted_dateset_train = df_train;
+concateneted_dateset_test = df_test;
 
 # categorical features
 t_c = [ 'Sex', 'Cabin', 'Embarked'];
 
 # create dummy variables
 for column in  t_c:
-	dummies = pd.get_dummies(concateneted_dateset[column], prefix=column, drop_first=True);
-	concateneted_dateset = pd.concat([concateneted_dateset, dummies], axis = 1);
+	dummies_train = pd.get_dummies(concateneted_dateset_train[column], prefix=column, drop_first=True);
+	concateneted_dateset_train = pd.concat([concateneted_dateset_train, dummies_train], axis = 1);
+	dummies_test = pd.get_dummies( concateneted_dateset_test[column], prefix=column, drop_first=True);
+	concateneted_dateset_test = pd.concat([ concateneted_dateset_test, dummies_test], axis = 1);
 
-df_y = concateneted_dateset['Survived']
-df_x = concateneted_dateset.loc[:, concateneted_dateset.columns != "Survived"]
+y_train = concateneted_dateset_train['Survived']
+X_train = concateneted_dateset_train.loc[:, concateneted_dateset_train.columns != "Survived"]
+
+# y_test = concateneted_dateset_test['Survived']
+X_test = concateneted_dateset_test.loc[:, concateneted_dateset_test.columns != "Survived"]
 # split the dataset back to train and test sets
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(df_x,df_y, test_size = 0.25, random_state = 0)
+# from sklearn.model_selection import train_test_split
+# X_train, X_test, y_train, y_test = train_test_split(df_x,df_y, test_size = 0.25, random_state = 0)
+
+
+missing_columns = set(X_train.columns) - set(X_test.columns)
+missing_columns_2 = set(X_test.columns) - set(X_train.columns)
+missing_data = pd.DataFrame(0, index=np.arange(len(X_test)), columns=missing_columns)
+missing_data_2 = pd.DataFrame(0, index=np.arange(len(X_train)), columns=missing_columns_2)
+X_test = X_test.append(missing_data)
+X_train = X_train.append(missing_data_2)
 
 # trainIndexs = np.random.rand(len(concateneted_dateset)) < 0.8
 # df_train = concateneted_dateset[trainIndexs]
@@ -94,3 +121,20 @@ while max_p_value > 0.05:
 
 # remove b0
 del X_train['b0'];
+
+""" KNN """
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors = 5, metric= 'minkowski', p =2)
+classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
+prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
+
+
+holdout_ids = passenger_id_test;
+sub_df = {
+	"Id":holdout_ids,
+	"Cover_Type": prediction	
+};
+
+ds = pd.DataFrame(sub_df);
+ds.to_csv("submission.csv", index=False);
+
