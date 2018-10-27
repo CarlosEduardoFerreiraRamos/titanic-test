@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 import statsmodels.formula.api as sm;
 import matplotlib.pyplot as plt
+import keras
 
 from plot import Plot
+from keras.models import Sequential
+from keras.layers import Dense
 from sklearn.preprocessing import Imputer
 from sklearn.preprocessing import LabelEncoder 
 from sklearn.preprocessing import OneHotEncoder
@@ -28,10 +31,7 @@ df_test[['Age']] = imputer.fit_transform(df_test[['Age']])
 df_test[['Fare']] = imputer.fit_transform(df_test[['Fare']])
 
 """ replace missign categorical data"""
-df_train['Cabin'] = df_train['Cabin'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
 df_train['Embarked'] = df_train['Embarked'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
-
-df_test['Cabin'] = df_test['Cabin'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
 df_test['Embarked'] = df_test['Embarked'].apply(lambda x: 'missing_data' if str(x) == 'nan'  else x);
 
 # catecorical_array = df_train.dtypes == object
@@ -40,10 +40,12 @@ df_test['Embarked'] = df_test['Embarked'].apply(lambda x: 'missing_data' if str(
 
 del df_train['Name']
 del df_train['Ticket']
+del df_train['Cabin']
 del df_train["PassengerId"]
 
 del df_test['Name']
 del df_test['Ticket']
+del df_test['Cabin']
 del df_test["PassengerId"]
 # LabelEncoder().fit_transform(df_train.loc[:, ['Survived', 'Sex']])
 
@@ -52,7 +54,7 @@ concateneted_dateset_train = df_train;
 concateneted_dateset_test = df_test;
 
 # categorical features
-t_c = [ 'Sex', 'Cabin', 'Embarked'];
+t_c = [ 'Sex', 'Embarked'];
 
 # create dummy variables
 for column in  t_c:
@@ -70,11 +72,11 @@ X_test = concateneted_dateset_test.loc[:, concateneted_dateset_test.columns != "
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(df_x,df_y, test_size = 0.25, random_state = 0)
 
-
+""" EGUALATE DATE SETS COLUMNS """
 missing_columns = set(X_train.columns) - set(X_test.columns)
 missing_columns_2 = set(X_test.columns) - set(X_train.columns)
-missing_data = pd.DataFrame(0, index=np.arange(len(X_test)), columns=missing_columns)
-missing_data_2 = pd.DataFrame(0, index=np.arange(len(X_train)), columns=missing_columns_2)
+missing_data = pd.DataFrame(0, index=X_test.index, columns=missing_columns)
+missing_data_2 = pd.DataFrame(0, index=X_train.index, columns=missing_columns_2)
 X_test = pd.concat([X_test,missing_data],  axis=1)
 X_train = pd.concat([X_train, missing_data_2], axis=1)
 
@@ -118,14 +120,10 @@ while max_p_value > 0.05:
 # remove b0
 del X_train['b0'];
 
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
-
 """ ANN """
 classifier = Sequential()
-classifier.add(Dense(output_dim = 20, init = 'uniform', activation = 'relu', input_dim = 40))
-classifier.add(Dense(output_dim = 20, init = 'uniform', activation = 'relu'))
+classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu', input_dim = 5))
+classifier.add(Dense(output_dim = 3, init = 'uniform', activation = 'relu'))
 classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
 classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
@@ -141,6 +139,17 @@ scores = classifier.evaluate(X_train.loc[:, X_train.columns != "Survived"],y_tra
 # round prediction
 y_pred =  [round(x[0]) for x in prediction]
 formatted_pred = [int(i) for i in y_pred]
+
+
+# DONT CHANGE PASS values
+past_values
+# DATA EQUALIT CHANGED
+eq_values
+# WITHOUT CABIN
+w_c  = formatted_pred 
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(past_values, formatted_pred)
 
 holdout_ids = passenger_id_test;
 sub_df = {

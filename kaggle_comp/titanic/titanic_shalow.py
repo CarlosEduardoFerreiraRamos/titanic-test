@@ -74,7 +74,7 @@ X_test = concateneted_dateset_test.loc[:, concateneted_dateset_test.columns != "
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(df_x,df_y, test_size = 0.25, random_state = 0)
 
-
+""" EGUALATE DATE SETS COLUMNS """
 missing_columns = set(X_train.columns) - set(X_test.columns)
 missing_columns_2 = set(X_test.columns) - set(X_train.columns)
 missing_data = pd.DataFrame(0, index=np.arange(len(X_test)), columns=missing_columns)
