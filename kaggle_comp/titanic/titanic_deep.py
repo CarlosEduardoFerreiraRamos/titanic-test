@@ -8,10 +8,6 @@ from sklearn.preprocessing import Imputer
 from sklearn.preprocessing import LabelEncoder 
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import GridSearchCV
-
 
 df_train = pd.read_csv('data_sets/titanic/train.csv')
 df_test = pd.read_csv('data_sets/titanic/test.csv');
@@ -122,19 +118,35 @@ while max_p_value > 0.05:
 # remove b0
 del X_train['b0'];
 
-""" KNN """
-from sklearn.neighbors import KNeighborsClassifier
-classifier = KNeighborsClassifier(n_neighbors = 5, metric= 'minkowski', p =2)
-classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train)
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+""" ANN """
+classifier = Sequential()
+classifier.add(Dense(output_dim = 20, init = 'uniform', activation = 'relu', input_dim = 40))
+classifier.add(Dense(output_dim = 20, init = 'uniform', activation = 'relu'))
+classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+# becouse the activation function in the output layer is a sigmoid function prediction will have values raging from 1 to 0  
+
+# add the data
+classifier.fit(X_train.loc[:, X_train.columns != "Survived"], y_train, batch_size = 10, nb_epoch = 100)
 prediction = classifier.predict(X_test.loc[:, X_test.columns != "Survived"])
 
+# loss
+scores = classifier.evaluate(X_train.loc[:, X_train.columns != "Survived"],y_train)
+
+# round prediction
+y_pred =  [round(x[0]) for x in prediction]
+formatted_pred = [int(i) for i in y_pred]
 
 holdout_ids = passenger_id_test;
 sub_df = {
 	"PassengerId":holdout_ids,
-	"Survived": prediction	
+	"Survived": formatted_pred	
 };
 
 ds = pd.DataFrame(sub_df);
-ds.to_csv("predict_data/titanic/submission.csv", index=False);
-
+ds.to_csv("predict_data/titanic/submission_ann.csv", index=False);
