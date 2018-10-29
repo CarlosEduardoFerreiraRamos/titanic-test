@@ -122,13 +122,13 @@ model.fit(X_train.loc[:, X_train.columns != independent_varible], y_train);
 prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
 
 """POLYNOMIAL REGRESSION"""
-# from sklearn.preprocessing import PolynomialFeatures;
-# from sklearn.linear_model import LinearRegression
-# poly = PolynomialFeatures(degree=86)
-# poly_features = poly.fit_transform(X_train.loc[:, X_train.columns != independent_varible], y_train);
-# model = LinearRegression();
-# model.fit(poly_features, y_train);
-# prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
+from sklearn.preprocessing import PolynomialFeatures;
+from sklearn.linear_model import LinearRegression
+poly = PolynomialFeatures(degree=4)
+poly_features = poly.fit_transform(X_train.loc[:, X_train.columns != independent_varible], y_train);
+model = LinearRegression();
+model.fit(poly_features, y_train);
+prediction = model.predict(poly_features);
 
 """ SVR """
 from sklearn.svm import SVR;
@@ -142,6 +142,9 @@ model = DecisionTreeRegressor(criterion = 'mse', random_state = 0)
 model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
 prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
 
+""" RANDOM FOREST """
+from sklearn.ensemble import RandomForestClassifier;
+
 """ CROSS VAL SCORE """
 from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = model, X = X_train.loc[:, X_train.columns != independent_varible], y = y_train, cv = 10)
@@ -153,7 +156,9 @@ Linear Regression
 -1.3992599566482349e+22
 4.1977798697162665e+22
 
-
+Polynomial Regression (2)
+0.6210226242853178
+0.3446460109953803
 
 SVR (rbf)
 -0.053273852656899476
