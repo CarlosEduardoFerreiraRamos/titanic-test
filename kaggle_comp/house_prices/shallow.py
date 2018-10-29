@@ -121,9 +121,24 @@ model = LinearRegression()
 model.fit(X_train.loc[:, X_train.columns != independent_varible], y_train);
 prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
 
+"""POLYNOMIAL REGRESSION"""
+# from sklearn.preprocessing import PolynomialFeatures;
+# from sklearn.linear_model import LinearRegression
+# poly = PolynomialFeatures(degree=86)
+# poly_features = poly.fit_transform(X_train.loc[:, X_train.columns != independent_varible], y_train);
+# model = LinearRegression();
+# model.fit(poly_features, y_train);
+# prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
+
 """ SVR """
 from sklearn.svm import SVR;
 model = SVR(kernel = 'rbf')
+model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
+
+""" DECISION TREES """
+from sklearn.tree import DecisionTreeRegressor;
+model = DecisionTreeRegressor(criterion = 'mse', random_state = 0)
 model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
 prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
 
@@ -138,7 +153,13 @@ Linear Regression
 -1.3992599566482349e+22
 4.1977798697162665e+22
 
-SVR
+
+
+SVR (rbf)
 -0.053273852656899476
 0.03134331574078041
+
+DECISON TREES
+0.637738710756625
+0.15456912242531662
 """
