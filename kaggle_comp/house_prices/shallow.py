@@ -115,13 +115,17 @@ while max_p_value > 0.05:
 # remove b0
 del X_train['b0'];
 
-""" LOGISTIC REGRESSION """
+""" LINEAR REGRESSION """
 from sklearn.linear_model import LinearRegression
 model = LinearRegression()
 model.fit(X_train.loc[:, X_train.columns != independent_varible], y_train);
 prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
 
-
+""" SVR """
+from sklearn.svm import SVR;
+model = SVR(kernel = 'rbf')
+model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
 
 """ CROSS VAL SCORE """
 from sklearn.model_selection import cross_val_score
@@ -133,4 +137,8 @@ accuracies.std()
 Linear Regression
 -1.3992599566482349e+22
 4.1977798697162665e+22
+
+SVR
+-0.053273852656899476
+0.03134331574078041
 """
