@@ -13,15 +13,15 @@ from sklearn.model_selection import GridSearchCV
 
 df_train = pd.read_csv('data_sets/house_prices_train.csv')
 df_test = pd.read_csv('data_sets/house_prices_test.csv');
-independent_varible = "SalePrice"
+dependent_varible = "SalePrice"
 index_varible = "Id"
-X_train = df_train.loc[:, df_train.columns != independent_varible]
-y_train = df_train[independent_varible]
+X_train = df_train.loc[:, df_train.columns != dependent_varible]
+y_train = df_train[dependent_varible]
 X_test = df_test
 # split the dataset back to train and test sets
 # from sklearn.model_selection import train_test_split
-# X_train, X_test, y_train, y_test = train_test_split(df_train.loc[:, df_train.columns != independent_varible],
-# 													df_train[independent_varible],
+# X_train, X_test, y_train, y_test = train_test_split(df_train.loc[:, df_train.columns != dependent_varible],
+# 													df_train[dependent_varible],
 # 													test_size = 0.25,
 # 													random_state = 0)
 
@@ -59,8 +59,8 @@ for column in  t_c:
 	dummies_test = pd.get_dummies( concateneted_dateset_test[column], prefix=column, drop_first=True);
 	concateneted_dateset_test = pd.concat([ concateneted_dateset_test, dummies_test], axis = 1);
 
-X_train = concateneted_dateset_train.loc[:, concateneted_dateset_train.columns != independent_varible]
-X_test = concateneted_dateset_test.loc[:, concateneted_dateset_test.columns != independent_varible]
+X_train = concateneted_dateset_train.loc[:, concateneted_dateset_train.columns != dependent_varible]
+X_test = concateneted_dateset_test.loc[:, concateneted_dateset_test.columns != dependent_varible]
 
 """dealing with numeric missing data"""
 columns_train = X_train.columns[X_train.isnull().any()].tolist();
@@ -87,9 +87,9 @@ X_test = pd.concat([X_test,missing_data],  axis=1)
 X_train = pd.concat([X_train, missing_data_2], axis=1)
 
 """ FUTURE SCALING THE DATA"""
-fitted = StandardScaler().fit(X_train.loc[:, X_train.columns != independent_varible]);
-X_train.loc[:, X_train.columns != independent_varible] = fitted.transform(X_train.loc[:, X_train.columns != independent_varible]);
-X_test.loc[:, X_test.columns != independent_varible] = fitted.transform(X_test.loc[:, X_test.columns != independent_varible]);
+fitted = StandardScaler().fit(X_train.loc[:, X_train.columns != dependent_varible]);
+X_train.loc[:, X_train.columns != dependent_varible] = fitted.transform(X_train.loc[:, X_train.columns != dependent_varible]);
+X_test.loc[:, X_test.columns != dependent_varible] = fitted.transform(X_test.loc[:, X_test.columns != dependent_varible]);
 
 """ADDING b0"""
 data_length = len(X_train);
@@ -105,7 +105,7 @@ while max_p_value > 0.05:
 	if not non_significant_column == None:
 		del X_train[non_significant_column];
 		del X_test[non_significant_column];
-	sm_result = sm.OLS(endog = y_train, exog = X_train.loc[:, X_train.columns != independent_varible]).fit();
+	sm_result = sm.OLS(endog = y_train, exog = X_train.loc[:, X_train.columns != dependent_varible]).fit();
 	sm_result.summary()
 	p_values = sm_result.pvalues;
 	max_p_value = np.amax(p_values)
@@ -118,14 +118,14 @@ del X_train['b0'];
 """ LINEAR REGRESSION """
 from sklearn.linear_model import LinearRegression
 model = LinearRegression()
-model.fit(X_train.loc[:, X_train.columns != independent_varible], y_train);
-prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible]);
+model.fit(X_train.loc[:, X_train.columns != dependent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != dependent_varible]);
 
 """POLYNOMIAL REGRESSION"""
 from sklearn.preprocessing import PolynomialFeatures;
 from sklearn.linear_model import LinearRegression
 poly = PolynomialFeatures(degree=4)
-poly_features = poly.fit_transform(X_train.loc[:, X_train.columns != independent_varible], y_train);
+poly_features = poly.fit_transform(X_train.loc[:, X_train.columns != dependent_varible], y_train);
 model = LinearRegression();
 model.fit(poly_features, y_train);
 prediction = model.predict(poly_features);
@@ -133,21 +133,24 @@ prediction = model.predict(poly_features);
 """ SVR """
 from sklearn.svm import SVR;
 model = SVR(kernel = 'rbf')
-model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
-prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
+model.fit( X_train.loc[:, X_train.columns != dependent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != dependent_varible])
 
 """ DECISION TREES """
 from sklearn.tree import DecisionTreeRegressor;
 model = DecisionTreeRegressor(criterion = 'mse', random_state = 0)
-model.fit( X_train.loc[:, X_train.columns != independent_varible], y_train);
-prediction = model.predict(X_test.loc[:, X_test.columns != independent_varible])
+model.fit( X_train.loc[:, X_train.columns != dependent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != dependent_varible])
 
 """ RANDOM FOREST """
-from sklearn.ensemble import RandomForestClassifier;
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor(n_estimators = 10, criterion = 'mse', random_state = 0);
+model.fit( X_train.loc[:, X_train.columns != dependent_varible], y_train);
+prediction = model.predict(X_test.loc[:, X_test.columns != dependent_varible])
 
 """ CROSS VAL SCORE """
 from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = model, X = X_train.loc[:, X_train.columns != independent_varible], y = y_train, cv = 10)
+accuracies = cross_val_score(estimator = model, X = X_train.loc[:, X_train.columns != dependent_varible], y = y_train, cv = 10)
 accuracies.mean()
 accuracies.std()
 
@@ -167,4 +170,16 @@ SVR (rbf)
 DECISON TREES
 0.637738710756625
 0.15456912242531662
+
+RANDOM FOREST (10,mse)
+0.8447257171419809
+0.02456721706443379
 """
+
+sub_df = {
+	"Id":index_column,
+	"SalePrice": prediction	
+};
+
+ds = pd.DataFrame(sub_df);
+ds.to_csv("predict_data/house_prices_submission_test.csv", index=False);
