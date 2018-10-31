@@ -1,9 +1,9 @@
+from plot import Plot as plot
+
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as sm;
 import matplotlib.pyplot as plt
-
-from plot import Plot
 from sklearn.preprocessing import Imputer
 from sklearn.preprocessing import LabelEncoder 
 from sklearn.preprocessing import OneHotEncoder
@@ -18,12 +18,17 @@ index_varible = "Id"
 X_train = df_train.loc[:, df_train.columns != dependent_varible]
 y_train = df_train[dependent_varible]
 X_test = df_test
+
 # split the dataset back to train and test sets
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(df_train.loc[:, df_train.columns != dependent_varible],
 # 													df_train[dependent_varible],
 # 													test_size = 0.25,
 # 													random_state = 0)
+# X_train.info()
+# X_train.describe()
+# X_train.isnull().sum()
+# plot.plot_missing_values(df_train)
 
 index_column = X_test[index_varible]
 
@@ -182,4 +187,4 @@ sub_df = {
 };
 
 ds = pd.DataFrame(sub_df);
-ds.to_csv("predict_data/house_prices_submission_test.csv", index=False);
+ds.to_csv("predict_data/house_prices_submission.csv", index=False);

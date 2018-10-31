@@ -1,9 +1,28 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 class Plot(object):
 	def __init__(self):
 		pass
+
+	@staticmethod
+	def plot_missing_values(data_set):
+		null_counts = data_set.isnull().sum()/len(data_set)
+		plt.figure(figsize=(16,8))
+		plt.xticks(np.arange(len(null_counts))+0.5,null_counts.index,rotation='vertical')
+		plt.ylabel('fraction of rows with missing data')
+		plt.bar(np.arange(len(null_counts)),null_counts)
+		plt.show()
+
+	@staticmethod
+	def count_missing_values(data_set, non_feature_columns=[]):
+		feature_columns = data_set.columns.drop(non_feature_columns)
+		iterables = [feature_columns,['count','fraction','seq']]
+		index = pd.MultiIndex.from_product(iterables,names=['feature','stat'])
+		ids = data_set.id.unique()
+		ids.sort()
+		return pd.DataFrame(data=None,index=ids,columns=index)
 
 	def plot_set_survived(self, data_set, index, values):
 		sex_pivot = data_set.pivot_table(index=index, values=values);
