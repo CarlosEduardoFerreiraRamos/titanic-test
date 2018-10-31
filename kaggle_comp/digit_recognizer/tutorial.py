@@ -1,3 +1,5 @@
+# tutorial origin https://www.kaggle.com/yassineghouzam/introduction-to-cnn-keras-0-997-top-6
+
 from plot import Plot as plot 
 
 import pandas as pd
