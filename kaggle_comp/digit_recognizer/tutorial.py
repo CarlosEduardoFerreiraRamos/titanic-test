@@ -137,3 +137,150 @@ The metric function "accuracy" is used is to evaluate the performance our model.
 This metric function is similar to the loss function, except that the results
 from the metric evaluation are not used when training the model (only for evaluation).
 """
+
+optimizer = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0) # Define the optimizer
+model.compile(optimizer = optimizer , loss = "categorical_crossentropy", metrics=["accuracy"]) # Compile the model
+
+"""
+In order to make the optimizer converge faster and closest to the global minimum
+of the loss function, i used an annealing method of the learning rate (LR).
+
+The LR is the step by which the optimizer walks through the 'loss landscape'.
+The higher LR, the bigger are the steps and the quicker is the convergence.
+However the sampling is very poor with an high LR and the optimizer could
+probably fall into a local minima.
+
+Its better to have a decreasing learning rate during the training to reach 
+efficiently the global minimum of the loss function.
+
+To keep the advantage of the fast computation time with a high LR, i decreased
+the LR dynamically every X steps (epochs) depending if it is necessary (when
+accuracy is not improved).
+
+With the ReduceLROnPlateau function from Keras.callbacks, i choose to reduce the
+LR by half if the accuracy is not improved after 3 epochs.
+"""
+
+# Set a learning rate annealer
+learning_rate_reduction = ReduceLROnPlateau(monitor='val_acc', 
+                                            patience=3, 
+                                            verbose=1, 
+                                            factor=0.5, 
+                                            min_lr=0.00001)
+
+epochs = 1 # Turn epochs to 30 to get 0.9967 accuracy
+batch_size = 86
+
+"""
+In order to avoid overfitting problem, we need to expand artificially our handwritten
+digit dataset. We can make your existing dataset even larger. The idea is to alter the
+training data with small transformations to reproduce the variations occuring when
+someone is writing a digit.
+
+For example, the number is not centered The scale is not the same (some who write with
+big/small numbers) The image is rotated...
+
+Approaches that alter the training data in ways that change the array representation
+while keeping the label the same are known as data augmentation techniques. Some popular
+augmentations people use are grayscales, horizontal flips, vertical flips, random crops,
+color jitters, translations, rotations, and much more.
+
+By applying just a couple of these transformations to our training data, we can easily
+double or triple the number of training examples and create a very robust model.
+
+The improvement is important :
+
+Without data augmentation i obtained an accuracy of 98.114%
+With data augmentation i achieved 99.67% of accuracy
+"""
+# With data augmentation to prevent overfitting (accuracy 0.99286)
+
+datagen = ImageDataGenerator(
+        featurewise_center=False,  # set input mean to 0 over the dataset
+        samplewise_center=False,  # set each sample mean to 0
+        featurewise_std_normalization=False,  # divide inputs by std of the dataset
+        samplewise_std_normalization=False,  # divide each input by its std
+        zca_whitening=False,  # apply ZCA whitening
+        rotation_range=10,  # randomly rotate images in the range (degrees, 0 to 180)
+        zoom_range = 0.1, # Randomly zoom image 
+        width_shift_range=0.1,  # randomly shift images horizontally (fraction of total width)
+        height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
+        horizontal_flip=False,  # randomly flip images
+        vertical_flip=False)  # randomly flip images
+
+datagen.fit(X_train)
+
+"""
+For the data augmentation, i choosed to :
+
+Randomly rotate some training images by 10 degrees
+Randomly Zoom by 10% some training images
+Randomly shift images horizontally by 10% of the width
+Randomly shift images vertically by 10% of the height
+I did not apply a vertical_flip nor horizontal_flip since
+it could have lead to misclassify symetrical numbers such as 6 and 9.
+
+Once our model is ready, we fit the training dataset .
+"""
+
+# Fit the model
+history = model.fit_generator(datagen.flow(X_train,Y_train,
+                             batch_size=batch_size),
+                             epochs = epochs,
+                             validation_data = (X_val,Y_val),
+                             verbose = 2,
+                             steps_per_epoch=X_train.shape[0],
+                             callbacks=[learning_rate_reduction])
+
+
+# Plot the loss and accuracy curves for training and validation 
+fig, ax = plt.subplots(2,1)
+ax[0].plot(history.history['loss'], color='b', label="Training loss")
+ax[0].plot(history.history['val_loss'], color='r', label="validation loss",axes =ax[0])
+legend = ax[0].legend(loc='best', shadow=True)
+
+ax[1].plot(history.history['acc'], color='b', label="Training accuracy")
+ax[1].plot(history.history['val_acc'], color='r',label="Validation accuracy")
+legend = ax[1].legend(loc='best', shadow=True)
+
+# Look at confusion matrix 
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+# Predict the values from the validation dataset
+Y_pred = model.predict(X_val)
+# Convert predictions classes to one hot vectors 
+Y_pred_classes = np.argmax(Y_pred,axis = 1) 
+# Convert validation observations to one hot vectors
+Y_true = np.argmax(Y_val,axis = 1) 
+# compute the confusion matrix
+confusion_mtx = confusion_matrix(Y_true, Y_pred_classes) 
+# plot the confusion matrix
+plot_confusion_matrix(confusion_mtx, classes = range(10)) 
+
