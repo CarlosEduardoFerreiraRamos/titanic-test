@@ -20,6 +20,7 @@ from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 from keras.optimizers import RMSprop
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ReduceLROnPlateau
+""" """
 
 train = pd.read_csv("./data_sets/digit_rec/train.csv")
 test = pd.read_csv("./data_sets/digit_rec/test.csv")
@@ -58,7 +59,7 @@ random_seed = 2
 X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size = 0.1, random_state=random_seed)
 
 g = plt.imshow(X_train[0][:,:,0])
-# plt.show()
+plt.show()
 
 """
 The first is the convolutional (Conv2D) layer. It is like a set of learnable filters.
