@@ -24,6 +24,17 @@ class Plot(object):
 		ids.sort()
 		return pd.DataFrame(data=None,index=ids,columns=index)
 
+	@staticmethod
+	def sum_confusion_matrix(matrix):
+		sum_list = [0,0]
+		for index_i, row in enumerate(matrix):
+			for index_j, value in enumerate(row):
+				if index_i == index_j:
+					sum_list[0] = sum_list[0] + matrix[index_i][index_j]
+				else:
+					sum_list[1] = sum_list[1] + matrix[index_i][index_j]
+		return sum_list
+
 	def plot_set_survived(self, data_set, index, values):
 		sex_pivot = data_set.pivot_table(index=index, values=values);
 		sex_pivot.plot.bar();
