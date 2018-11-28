@@ -44,5 +44,29 @@ analysis for any combination of categorical and continuous variables. The combin
 Categorical & Categorical, Categorical & Continuous and Continuous & Continuous. Different methods
 are used to tackle these combinations during analysis process.
 
-### stop here
+    *Continuous & Continuous: While doing bi-variate analysis between two continuous variables, we
+    should look at scatter plot. It is a nifty way to find out the relationship between two variables.
+    The pattern of scatter plot indicates the relationship between variables. The relationship can
+    be linear or non-linear.
+        - Scatter plot shows the relationship between two variable but does not indicates the strength
+          of relationship amongst them. To find the strength of the relationship, we use Correlation.
+          Correlation varies between -1 and +1.
+
+            -1: perfect negative linear correlation;
+            +1:perfect positive linear correlation and 
+            0: No correlation
+
+        Correlation can be derived using following formula:
+        Correlation = Covariance(X,Y) / SQRT( Var(X)* Var(Y))
+    
+    *Categorical & Categorical: To find the relationship between two categorical variables,
+    we can use following methods:
+        - Two-way table: We can start analyzing the relationship by creating a two-way table of count and
+          count%. The rows represents the category of one variable and the columns represent the categories
+          of the other variable. We show count or count% of observations available in each combination of
+          row and column categories.
+
+        - Stacked Column Chart: This method is more of a visual form of Two-way table.
+
+        - Chi-Square Test: stoped here
 """
