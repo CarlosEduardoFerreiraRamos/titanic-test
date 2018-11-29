@@ -68,5 +68,34 @@ are used to tackle these combinations during analysis process.
 
         - Stacked Column Chart: This method is more of a visual form of Two-way table.
 
-        - Chi-Square Test: stoped here
+        - Chi-Square Test: This test is used to derive the statistical significance of relationship between
+          the variables. Also, it tests whether the evidence in the sample is strong enough to generalize
+          that the relationship for a larger population as well. Chi-square is based on the difference between
+          the expected and observed frequencies in one or more categories in the two-way table. It returns
+          probability for the computed chi-square distribution with the degree of freedom.
+
+          Probability 0, it indicates that both categorical variable are dependent, and 1 that they aren't
+
+          Probability less than 0.05, it indicates that the relationship between the variables is significant
+          at 95% confidence. The chi-square test statistic for a test of independence of two categorical
+          variables is found by: x² = SUM((O-E)²/E). Where O represents the frequency, while E is the expected
+          frequency under the null hypothesis and can be computed by: E = (row total x column total)/ sample size
+
+          Statistical Measures used to analyze the power of relationship are:
+            Cramer’s V for Nominal Categorical Variable
+            Mantel-Haenszed Chi-Square for ordinal categorical variable.
+
+    *Categorical & Continuous: While exploring relation between categorical and continuous variables, we can
+    draw box plots for each level of categorical variables. If levels are small in number, it will not show
+    the statistical significance. To look at the statistical significance we can perform Z-test, T-test or ANOVA.
+
+        - Z-Test/ T-Test:- Either test assess whether mean of two groups are statistically different from each
+          other or not.
+
+          Z = |medianX1 - medianX2 | / root²( S1²/N1  -  S2²/N2 )
+          
+          If the probability of Z is small then the difference of two averages is more significant. The T-test is
+          very similar to Z-test but it is used when number of observation for both categories is less than 30.
+          
+        - ANOVA:- It assesses whether the average of more than two groups is statistically different.
 """
