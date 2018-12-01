@@ -1,4 +1,5 @@
 """
+# This explanation is available at the following link: https://www.analyticsvidhya.com/blog/2016/01/guide-data-exploration/#two
 Data Exploration and Preparation
 
 1 - Variable Identification
@@ -132,4 +133,14 @@ occurrence of these missing values. They may occur at two stages:
         - Missing that depends on the missing value itself: This is a case when the probability of missing value is directly
           correlated with missing value itself. For example: People with higher or lower income are likely to provide non-response
           to their earning.
+
+Methods to treat missing values
+    *Deletion:  It is of two types: List Wise Deletion and Pair Wise Deletion.
+        - In list wise deletion, we delete observations where any of the variable is missing. Simplicity is one of the major
+          advantage of this method, but this method reduces the power of model because it reduces the sample size.
+        - In pair wise deletion, we perform analysis with all cases in which the variables of interest are present. Advantage of
+          this method is, it keeps as many cases available for analysis. One of the disadvantage of this method, it uses different
+          sample size for different variables.
+    #Deletion methods are used when the nature of missing data is “Missing completely at random” else non random missing values
+     can bias the model output.
 """
