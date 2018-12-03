@@ -99,10 +99,8 @@ are used to tackle these combinations during analysis process.
           very similar to Z-test but it is used when number of observation for both categories is less than 30.
           
         - ANOVA:- It assesses whether the average of more than two groups is statistically different.
-"""
 
-"""
-3. Missing value treatment
+Missing value treatment
 
 Why missing values treatment is required?
 Missing data in the training data set can reduce the power / fit of a model or can lead to a biased model because
@@ -181,7 +179,57 @@ Methods to treat missing values
               similar instances.
             # Choice of k-value is very critical. Higher value of k would include attributes which are significantly different from what we
               need whereas lower value of k implies missing out of significant attributes.
+"""
 
+"""
+3.Outlier detection and treatment
+Outliers tend to make your data skewed and reduces accuracy.
+
+Outlier is a commonly used terminology by analysts and data scientists as it needs close attention else it can result in wildly wrong
+estimations. Simply speaking, Outlier is an observation that appears far away and diverges from an overall pattern in a sample.
+
+types of Outliers
+Outlier can be of two types: Univariate and Multivariate. Above, we have discussed the example of univariate outlier. These outliers can
+be found when we look at distribution of a single variable. Multi-variate outliers are outliers in an n-dimensional space. In order to find
+them, you have to look at distributions in multi-dimensions.
+
+causes Outliers
+Whenever we come across outliers, the ideal way to tackle them is to find out the reason of having these outliers. The method to deal with
+them would then depend on the reason of their occurrence. Causes of outliers can be classified in two broad categories:
+    - Artificial (Error) / Non-natural
+    - Natural.
+
+    in detail:
+      - Data Entry Errors: Human errors such as errors caused during data collection, recording, or entry can cause outliers in data.
+      - Measurement Error: It is the most common source of outliers. This is caused when the measurement instrument used turns out to be
+        faulty.
+      - Experimental Error: Another cause of outliers is experimental error. For example: In a 100m sprint of 7 runners, one runner missed
+        out on concentrating on the ‘Go’ call which caused him to start late. 
+      - Intentional Outlier: This is commonly found in self-reported measures that involves sensitive data. For example: Teens would
+        typically under report the amount of alcohol that they consume.
+      - Data Processing Error: Whenever we perform data mining, we extract data from multiple sources. It is possible that some manipulation
+        or extraction errors may lead to outliers in the dataset.
+      - Sampling error: For instance, we have to measure the height of athletes. By mistake, we include a few basketball players in the
+        sample. This inclusion is likely to cause outliers in the dataset.
+      - Natural Outlier: When an outlier is not artificial (due to error), it is a natural outlier. For instance: In my last assignment
+        with one of the renowned insurance company, I noticed that the performance of top 50 financial advisors was far higher than rest
+        of the population. Surprisingly, it was not due to any error. Hence, whenever we perform any data mining activity with advisors,
+        we used to treat this segment separately.
+
+The impact of Outliers on a dataset
+Outliers can drastically change the results of the data analysis and statistical modeling. There are numerous unfavourable impacts of
+outliers in the data set:
+
+  *It increases the error variance and reduces the power of statistical tests
+  *If the outliers are non-randomly distributed, they can decrease normality
+  *They can bias or influence estimates that may be of substantive interest
+  *They can also impact the basic assumption of Regression, ANOVA and other statistical model assumptions.
+
+Outlies Detection
+Most commonly used method to detect outliers is visualization. We use various visualization methods, like Box-plot, Histogram, Scatter Plot.
+Some analysts also various thumb rules to detect outliers. Like the following:
+
+stoped here
 
 
 """
