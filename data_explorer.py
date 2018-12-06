@@ -228,8 +228,16 @@ outliers in the data set:
 Outlies Detection
 Most commonly used method to detect outliers is visualization. We use various visualization methods, like Box-plot, Histogram, Scatter Plot.
 Some analysts also various thumb rules to detect outliers. Like the following:
+  *Any value, which is beyond the range of -1.5 x IQR to 1.5 x IQR
+  *Use capping methods. Any value which out of range of 5th and 95th percentile can be considered as outlier
+  *Data points, three or more standard deviation away from mean are considered outlier
+  *Outlier detection is merely a special case of the examination of data for influential data points and it also depends on the business
+   understanding
+  *Bivariate and multivariate outliers are typically measured using either an index of influence or leverage, or distance. Popular indices
+   such as Mahalanobis’ distance and Cook’s D are frequently used to detect outliers.
 
-stoped here
-
-
+Removing Outliers
+Most of the ways to deal with outliers are similar to the methods of missing values like deleting observations, transforming them, binning
+them, treat them as a separate group, imputing values and other statistical methods.
+stoped ehre
 """
