@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 
+from sklearn.externals.joblib import dump, load
+
 # Importing the dataset
 small_links = pd.read_csv('./data_sets/nlp/movies/links_small.csv')
 movie_dataset = pd. read_csv('./data_sets/nlp/movies/movies_metadata.csv')
@@ -43,6 +45,8 @@ is much faster.
 
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 
+
+
 small_movie_dataset.loc[1]
 
 # the index is reseted to par with the 'cosine_sim' list
@@ -50,6 +54,11 @@ small_movie_dataset = small_movie_dataset.reset_index()
 
 titles = small_movie_dataset['title']
 indices = pd.Series(small_movie_dataset.index, index=small_movie_dataset['title'])
+
+
+titles.to_csv('models/nlp/movie_content_recomender/titles.csv', index=False)
+indices.to_csv('models/nlp/movie_content_recomender/indices.csv', index=False)
+dump(cosine_sim, 'models/nlp/movie_content_recomender/model.joblib')
 
 
 def get_recommendations(title):
