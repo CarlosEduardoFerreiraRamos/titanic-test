@@ -60,6 +60,7 @@ titles.to_csv('models/nlp/movie_content_recomender/titles.csv', index=False)
 indices.to_csv('models/nlp/movie_content_recomender/indices.csv', index=False)
 dump(cosine_sim, 'models/nlp/movie_content_recomender/model.joblib')
 
+indices
 
 def get_recommendations(title):
     idx = indices[title]
