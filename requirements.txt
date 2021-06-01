@@ -42,6 +42,6 @@ tensorboard==1.11.0
 tensorflow==1.11.0
 termcolor==1.1.0
 Theano==1.0.3+1.gc5c549bc8
-urllib3==1.23
+urllib3==1.26.5
 Werkzeug==0.14.1
 yarg==0.1.9
